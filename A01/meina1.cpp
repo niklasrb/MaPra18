@@ -13,25 +13,17 @@
 
 #include "unit.h"
 #include <iostream>
-#include <cmath>
-
-
-void BestimmeNullstellen(double a, double b, double c);
-
-#define DEBUG
-
-#ifdef DEBUG
-#define Ergebnis(...) Ergebnis(__VA_ARGS__); std::cout << __VA_ARGS__ << std::endl;
-#endif
 
 // ===== Hauptprogramm =====
+void BestimmeNullstellen(const double& a, const double& b, const double& c);
 
 int main()
 {
 	// Hier kommt nun Ihr Programm; viel Erfolg!
 	double a, b, c;
-	for(unsigned int i = 0; i < AnzahlBeispiele; i++) {
+	for(int i = 1; i <= AnzahlBeispiele; i++) {
 		Start(i, a, b, c);
+		std::cout << i << ": a = " << a << ", b = " << b << ", c = " << c << std::endl;
 		BestimmeNullstellen(a, b, c);
 	}
 	
@@ -62,13 +54,18 @@ void BestimmeNullstellen(const double& a, const double& b, const double& c)
 	else
 		radikand = p/2*p/2 - q;
 		
+	if(radikand == 0) {						// Doppelte Nullstelle
+		Ergebnis(1, false, -p/2.);
+		return;
+	}
+	
 	if(radikand < 0) {						// sind die Loesungen komplex?
 		radikand = - radikand;
 		cmplx = true;
 	}
 	
-	wurzel = std::sqrt(radikand);			// ziehe die Wurzel
-	if(std::abs(p) > 2*std::sqrt(DBL_MAX))
+	wurzel = std::sqrt(radikand);			// ziehe die positive Wurzel
+	if(std::abs(p) > 2*std::sqrt(DBL_MAX))	// falls noetig, korrigiere
 		wurzel *= std::abs(p);
 	
 	if(cmplx) {								// falls das Ergebnis komplex ist, sind wir fertig
@@ -77,17 +74,17 @@ void BestimmeNullstellen(const double& a, const double& b, const double& c)
 	}
 	
 	if(p >= 0) {							// Versuche Ausloeschung zu vermeiden
-		x2 = -p/2 - wurzel;
+		x2 = -p/2 - wurzel;	// < 0
 		if(q == 0) 
-			x1 = x2;
+			x1 = 0;
 		else 
 			x1 = q/x2;
 	} else {
-		x1 = -p/2 + wurzel;
+		x1 = -p/2 + wurzel;	// > 0
 		if(q == 0) 
-			x2 = x1;
+			x2 = 0;
 		else 
-			x2 = q/x2;
+			x2 = q/x1;
 	}
 	Ergebnis(2, false, x1, x2);
 	return;	
