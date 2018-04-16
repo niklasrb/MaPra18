@@ -5,31 +5,37 @@
 #define uint unsigned int
 
 
+void Test(void sortAlgorithm(uint*, size_t), const size_t gewuenschteLaenge);
+
 void Bubblesort(uint* feld, size_t n);
 void SelectionSort(uint* feld, size_t n);
+void InsertionSort(uint* feld, size_t n);
 
 int main(int argc, char **argv)
 {
 	size_t laenge = 10000;
-	uint* feld;
-	/*
-	std::cout << "BubbleSort" << std::endl;
-	for(uint i = 1; i <= AnzahlBeispiele; i++, laenge = 10000) {
-		start(i, laenge, feld);
-		Bubblesort(feld, laenge);
-		std::cout << "Laenge = " << laenge << std::endl;
-		ergebnis(feld);
-	}*/
 	
-	std::cout << "SelectionSort" << std::endl;
-	for(uint i = 1; i <= AnzahlBeispiele; i++, laenge = 100) {
+	//std::cout << "BubbleSort" << std::endl;
+	//Test(&Bubblesort, laenge)
+	//std::cout << "SelectionSort" << std::endl;
+	//Test(&SelectionSort, laenge)
+	std::cout << "InsertionSort" << std::endl;
+	Test(&InsertionSort, laenge);
+	
+	
+	return 0;
+}
+
+void Test(void sortAlgorithm(uint*, size_t), const size_t gewuenschteLaenge)
+{
+	size_t laenge = gewuenschteLaenge;
+	uint* feld;
+	for(uint i = 1; i <= AnzahlBeispiele; i++, laenge = gewuenschteLaenge) {
 		start(i, laenge, feld);
-		SelectionSort(feld, laenge);
+		sortAlgorithm(feld, laenge);
 		std::cout << "Laenge = " << laenge << std::endl;
 		ergebnis(feld);
 	}
-	
-	return 0;
 }
 
 void Bubblesort(uint* feld, size_t n)
@@ -53,6 +59,18 @@ void SelectionSort(uint* feld, size_t n)
 		}
 		if(i != min_index)
 			tausche(feld, i, min_index);
+	}
+}
+
+void InsertionSort(uint* feld, size_t n)
+{
+	size_t j;
+	for(size_t i = 1; i < n; i++) {
+		j = i;
+		while(j > 0 && feld[j] < feld[j-1]) {
+			tausche(feld, j, j-1);
+			j--;
+		} 
 	}
 }
 
