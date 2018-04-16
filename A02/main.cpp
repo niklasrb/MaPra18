@@ -10,17 +10,20 @@ void Test(void sortAlgorithm(uint*, size_t), const size_t gewuenschteLaenge);
 void Bubblesort(uint* feld, size_t n);
 void SelectionSort(uint* feld, size_t n);
 void InsertionSort(uint* feld, size_t n);
+void Quicksort(uint* feld, size_t n);
 
 int main(int argc, char **argv)
 {
-	size_t laenge = 10000;
+	size_t laenge = 1000;
 	
 	//std::cout << "BubbleSort" << std::endl;
 	//Test(&Bubblesort, laenge)
 	//std::cout << "SelectionSort" << std::endl;
 	//Test(&SelectionSort, laenge)
-	std::cout << "InsertionSort" << std::endl;
-	Test(&InsertionSort, laenge);
+	//std::cout << "InsertionSort" << std::endl;
+	//Test(&InsertionSort, laenge);
+	std::cout << "QuickSort" << std::endl;
+	Test(&Quicksort, laenge);
 	
 	
 	return 0;
@@ -72,5 +75,25 @@ void InsertionSort(uint* feld, size_t n)
 			j--;
 		} 
 	}
+}
+
+void Quicksort(uint* feld, size_t n)
+{
+	if(n <= 1) return;
+	size_t pivot, i, j;
+	pivot = n-1;
+	i = 0; j = n-2;
+	while(i < j) {
+		while(feld[i] < feld[pivot] && i < pivot)
+			i++;
+		while(feld[j] >= feld[pivot] && j > 0)
+			j--;
+		if(i < j)
+			tausche(feld, i, j);
+	}
+	if(feld[i] > feld[pivot])
+		tausche(feld, i, pivot);
+	Quicksort(feld, i);
+	Quicksort(feld + i+1, n-i-1);
 }
 
