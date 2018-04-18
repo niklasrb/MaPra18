@@ -2,15 +2,17 @@
 #define HEAP_H
 
 #include "unit.h"
-#include <vector>
 #include <cmath>
 #include <cassert>
+#include <algorithm>
 
 
 struct heap
 {
 protected:
-	std::vector<uint> h_;
+	uint* h_;
+	size_t max;
+	size_t size;
 	
 public:
 	static inline size_t left(size_t n)  { return 2*n+1; }
@@ -19,60 +21,77 @@ public:
 	
 	void heapify(size_t n)
 	{
-		if(left(n) >= h_.size())	// no children
+		if(left(n) >= size)	// no children
 			return; 
-		if(right(n)  >= h_.size()) { // one child
-			if(h_.at(left(n)) > h_.at(n))
-				tausche(h_.data(), n, left(n));
+		if(right(n)  >= size) { // one child
+			if(h_[left(n)] > h_[n])
+				tausche(h_, n, left(n));
 			return;
 		}	
 		// two children
-		if(h_.at(n) > h_.at(left(n)) && h_.at(n) > h_.at(right(n)))	// heap condition fullfilled
+		if(h_[n] > h_[left(n)] && h_[n] > h_[right(n)])	// heap condition fullfilled
 			return;
-		if(h_.at(left(n)) >= h_.at(right(n))) {	// exchange with left child
-			tausche(h_.data(), n, left(n));
+		if(h_[left(n)] >= h_[right(n)]) {	// exchange with left child
+			tausche(h_, n, left(n));
 			heapify(left(n));
 			
 		} else {	// exchange with right child
-			tausche(h_.data(), n, right(n));
+			tausche(h_, n, right(n));
 			heapify(right(n));
 		}
 	}
 	
+	void reserve(uint newMax)
+	{
+		assert(size < newMax);
+		uint* hnew = new uint[newMax];
+		for(size_t i = 0; i < size; i++)
+			hnew[i] = h_[i];
+		max = newMax;
+		delete [] h_;
+		h_ = hnew;
+	}
+	
 	void insert(uint v)
 	{
-		//std::cout << "insert " << v << std::endl;
-		h_.push_back(v);
-		if(h_.size() == 1)
+		if(size >= max) 
+			reserve(2*max);
+		size++;
+		h_[size-1] = v;
+		if(size == 1)
 			return;
-		size_t p = h_.size()-1;
+		size_t p = size-1;
 		do {
 			p = parent(p);
 			heapify(p);
 		} while(p >0);
-			
-		//print();
 	}
 	
 	uint extractMax()
 	{
-		assert(h_.size() > 0);
-		tausche(h_.data(), 0, h_.size()-1);
-		uint r = h_.back(); h_.pop_back();
+		assert(size > 0);
+		tausche(h_, 0, size-1);
+		uint r = h_[size-1]; size--;
 		heapify(0);
 		return r;
 	}
 	
-	heap(uint* feld, size_t n)
+	heap(uint* feld, size_t n) : max(std::max(n, (size_t)1)), size(0)
 	{
+		h_ = new uint[max];
 		for(size_t i = 0; i < n; i++)
 			insert(feld[i]);
+	}
+	
+	~heap()
+	{
+		delete [] h_;
 	}
 	
 	void print() 
 	{
 		std::cout << "[";
-		for(uint i = 0; i < h_.size(); i++) std::cout << h_[i] << (i < h_.size()-1 ? ", " : "]\n");
+		for(uint i = 0; i < size; i++) std::cout << h_[i] << (i < size -1 ? ", " : "]\n");
 	}
 	
 	
