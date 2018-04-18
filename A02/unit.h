@@ -12,6 +12,10 @@
 
 #include <iostream>
 
+// Typen
+
+typedef unsigned int uint;
+
 // Konstanten
 
 extern const unsigned int AnzahlBeispiele;

@@ -1,8 +1,9 @@
 
 #include "unit.h"
+#include "heap.h"
 #include <iostream>
 
-#define uint unsigned int
+
 
 
 void Test(void sortAlgorithm(uint*, size_t), const size_t gewuenschteLaenge);
@@ -13,6 +14,7 @@ void InsertionSort(uint* feld, size_t n);
 void Quicksort(uint* feld, size_t n);
 void QuicksortMedian3(uint* feld, size_t n);
 void MergeSort(uint* feld, size_t n);
+void HeapSort(uint* feld, size_t n);
 
 int main(int argc, char **argv)
 {
@@ -26,9 +28,10 @@ int main(int argc, char **argv)
 	//Test(&InsertionSort, laenge);
 	//std::cout << "QuickSort" << std::endl;
 	//Test(&Quicksort, laenge);
-	std::cout << "MergeSort" << std::endl;
-	Test(&MergeSort, laenge);
-	
+	//std::cout << "MergeSort" << std::endl;
+	//Test(&MergeSort, laenge);
+	std::cout << "HeapSort" << std::endl;
+	Test(&HeapSort, laenge);
 	
 	return 0;
 }
@@ -150,3 +153,9 @@ void MergeSort(uint* feld, size_t n)
 	delete [] f1; delete [] f2;
 }
 
+void HeapSort(uint* feld, size_t n)
+{
+	heap H(feld, n);
+	for(size_t i = n; i > 0; i--)
+		feld[i-1] = H.extractMax();
+}
