@@ -20,20 +20,20 @@ int main(int argc, char **argv)
 {
 	size_t laenge = 1000;
 	
-	//std::cout << "BubbleSort" << std::endl;
-	//Test(&Bubblesort, laenge)
-	//std::cout << "SelectionSort" << std::endl;
-	//Test(&SelectionSort, laenge)
-	//std::cout << "InsertionSort" << std::endl;
-	//Test(&InsertionSort, laenge);
-	std::cout << "QuickSort" << std::endl;
+	std::cout << "---BubbleSort" << std::endl;
+	Test(&Bubblesort, laenge);
+	std::cout << "---SelectionSort" << std::endl;
+	Test(&SelectionSort, laenge);
+	std::cout << "---InsertionSort" << std::endl;
+	Test(&InsertionSort, laenge);
+	std::cout << "---QuickSort" << std::endl;
 	Test(&Quicksort, laenge);
-	std::cout << "QuickSort Median3" << std::endl;
+	std::cout << "---QuickSort Median3" << std::endl;
 	Test(&QuicksortMedian3, laenge);
-	//std::cout << "MergeSort" << std::endl;
-	//Test(&MergeSort, laenge);
-	//std::cout << "HeapSort" << std::endl;
-	//Test(&HeapSort, laenge);
+	std::cout << "---MergeSort" << std::endl;
+	Test(&MergeSort, laenge);
+	std::cout << "---HeapSort" << std::endl;
+	Test(&HeapSort, laenge);
 	
 	return 0;
 }
@@ -104,29 +104,26 @@ size_t DivideAndConquer(uint* feld, size_t n)
 	return i;
 }
 
-void Quicksort(uint* feld, size_t n)
-{
-	if(n <= 1) return;
-	size_t i = DivideAndConquer(feld, n);
-	Quicksort(feld, i);
-	Quicksort(feld + i+1, n-i-1);
-}
 
-void QuicksortMedian3(uint* feld, size_t n)
+
+void Quicksort(uint* feld, size_t n, bool median3 = false)
 {
 	if(n <= 1) return;
 	size_t pivot = n-1;
-	if(n > 2) {
+	if(median3 && n > 2) {
 		if((feld[0] <= feld[n/2] && feld[n/2] <= feld[n-1]) || (feld[n-1] <= feld[n/2] && feld[n/2] <= feld[0]))
 			pivot = n/2;
 		if((feld[n/2] <= feld[0] && feld[0] <= feld[n-1]) || (feld[n-1] <= feld[0] && feld[0] <= feld[n/2]))
 			pivot = 0;
-	}	
-	tausche(feld, pivot, n-1);
+		tausche(feld, pivot, n-1);
+	}
 	size_t i = DivideAndConquer(feld, n);
-	QuicksortMedian3(feld, i);
-	QuicksortMedian3(feld + i+1, n-i-1);
+	Quicksort(feld, i, median3);
+	Quicksort(feld + i+1, n-i-1, median3);
 }
+
+void Quicksort(uint* feld, size_t n)		{	Quicksort(feld, n, false);	}
+void QuicksortMedian3(uint* feld, size_t n)	{	Quicksort(feld, n, true);	}
 
 void MergeSort(uint* feld, size_t n)
 {

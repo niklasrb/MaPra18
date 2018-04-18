@@ -88,7 +88,7 @@ public:
 		delete [] h_;
 	}
 	
-	void print() 
+	void print() const
 	{
 		std::cout << "[";
 		for(uint i = 0; i < size; i++) std::cout << h_[i] << (i < size -1 ? ", " : "]\n");
