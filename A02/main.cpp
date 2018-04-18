@@ -26,12 +26,14 @@ int main(int argc, char **argv)
 	//Test(&SelectionSort, laenge)
 	//std::cout << "InsertionSort" << std::endl;
 	//Test(&InsertionSort, laenge);
-	//std::cout << "QuickSort" << std::endl;
-	//Test(&Quicksort, laenge);
+	std::cout << "QuickSort" << std::endl;
+	Test(&Quicksort, laenge);
+	std::cout << "QuickSort Median3" << std::endl;
+	Test(&QuicksortMedian3, laenge);
 	//std::cout << "MergeSort" << std::endl;
 	//Test(&MergeSort, laenge);
-	std::cout << "HeapSort" << std::endl;
-	Test(&HeapSort, laenge);
+	//std::cout << "HeapSort" << std::endl;
+	//Test(&HeapSort, laenge);
 	
 	return 0;
 }
@@ -84,10 +86,11 @@ void InsertionSort(uint* feld, size_t n)
 	}
 }
 
-size_t DivideAndConquer(uint* feld, size_t n, size_t pivot) 
+size_t DivideAndConquer(uint* feld, size_t n) 
 {
-	size_t i, j;
+	size_t i, j, pivot;
 	i = 0; j = n-2;
+	pivot = n-1;
 	while(i < j) {
 		while(feld[i] < feld[pivot] && i < pivot)
 			i++;
@@ -104,7 +107,7 @@ size_t DivideAndConquer(uint* feld, size_t n, size_t pivot)
 void Quicksort(uint* feld, size_t n)
 {
 	if(n <= 1) return;
-	size_t i = DivideAndConquer(feld, n, n-1);
+	size_t i = DivideAndConquer(feld, n);
 	Quicksort(feld, i);
 	Quicksort(feld + i+1, n-i-1);
 }
@@ -114,12 +117,13 @@ void QuicksortMedian3(uint* feld, size_t n)
 	if(n <= 1) return;
 	size_t pivot = n-1;
 	if(n > 2) {
-		if((feld[1] <= feld[n/2] && feld[n/2] <= feld[n-1]) || (feld[n-1] <= feld[n/2] && feld[n/2] <= feld[1]))
+		if((feld[0] <= feld[n/2] && feld[n/2] <= feld[n-1]) || (feld[n-1] <= feld[n/2] && feld[n/2] <= feld[0]))
 			pivot = n/2;
-		if((feld[n/2] <= feld[1] && feld[1] <= feld[n-1]) || (feld[n-1] <= feld[1] && feld[1] <= feld[n/2]))
-			pivot = 1;
+		if((feld[n/2] <= feld[0] && feld[0] <= feld[n-1]) || (feld[n-1] <= feld[0] && feld[0] <= feld[n/2]))
+			pivot = 0;
 	}	
-	size_t i = DivideAndConquer(feld, n, pivot);	// adjust pivot algorithm here
+	tausche(feld, pivot, n-1);
+	size_t i = DivideAndConquer(feld, n);
 	QuicksortMedian3(feld, i);
 	QuicksortMedian3(feld + i+1, n-i-1);
 }
