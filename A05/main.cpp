@@ -4,10 +4,11 @@
 #include "unit.h"
 #include <iostream>
 #include <cstdlib>
+#include <fstream>
 
-Vektor Jakobi(const Matrix& A, const Vektor& b, const Vektor& x0, double& eps, int& maxiter);
-Vektor GaussSeidel(const Matrix& A, const Vektor& b, const Vektor& x0, double& eps, int& maxiter);
-Vektor ConjugateGradient(const Matrix& A, const Vektor& b, const Vektor& x0, double& eps, int& maxiter);
+Vektor Jakobi(const Matrix& A, const Vektor& b, const Vektor& x0, double& eps, int& maxiter, std::string output ="");
+Vektor GaussSeidel(const Matrix& A, const Vektor& b, const Vektor& x0, double& eps, int& maxiter, std::string output="");
+Vektor ConjugateGradient(const Matrix& A, const Vektor& b, const Vektor& x0, double& eps, int& maxiter, std::string output="");
 
 int main(int argc, char** argv)
 {
@@ -25,29 +26,31 @@ int main(int argc, char** argv)
 	std::cout << "Problem: " << std::endl << A << std::endl << b << std::endl 
 						<< "maxiter = " << maxiter << std::endl << "tol = " << tol << std::endl;
 	// Jakobi
-	x = Jakobi(A, b, x0, tol, maxiter);
+	x = Jakobi(A, b, x0, tol, maxiter, "jakobi.txt");
 	std::cout << "Jakobi: " << x << std::endl << "it: " << maxiter << "  - err: " << tol << std::endl;
 	Ergebnis(x, maxiter, 0);
 	// GaussSeidel
 	Start(ex, A, x0, b, tol, maxiter);
-	x = GaussSeidel(A, b, x0, tol, maxiter);
+	x = GaussSeidel(A, b, x0, tol, maxiter, "gaussseidel.txt");
 	std::cout << "GaussSeidel: " << x << std::endl << "it: " << maxiter << "  - err: " << tol << std::endl;
 	Ergebnis(x, maxiter, 1);
 	// Conjugate Gradient
 	Start(ex, A, x0, b, tol, maxiter);
-	x = ConjugateGradient(A, b, x0, tol, maxiter);
+	x = ConjugateGradient(A, b, x0, tol, maxiter, "conjgrad.txt");
 	std::cout << "ConjugateGradient: " << x << std::endl << "it: " << maxiter << "  - err: " << tol << std::endl;
 	Ergebnis(x, maxiter, 2);
-	
 	
 	return 0;
 }
 
-Vektor Jakobi(const Matrix& A, const Vektor& b, const Vektor& x0, double& eps, int& maxiter)
+Vektor Jakobi(const Matrix& A, const Vektor& b, const Vektor& x0, double& eps, int& maxiter, std::string output)
 {
 	int iter = 0;
 	double err = (A*x0 - b).Norm2(), s;
 	Vektor xold(x0), xnew(x0.Laenge());
+	std::fstream out; 
+	if(!output.empty())
+		out= std::fstream(output, std::ios_base::out);
 
 	while(iter < maxiter && err > eps) {
 		for(size_t i = 0; i < x0.Laenge(); i++) {
@@ -58,6 +61,8 @@ Vektor Jakobi(const Matrix& A, const Vektor& b, const Vektor& x0, double& eps, i
 			xnew(i) = (b(i) - s)/A(i, i);
 		}
 		err = (A*xnew - b).Norm2();
+		if(out.good());
+			out << err/b.Norm2() << std::endl;
 		xold = xnew;
 		iter++;
 	}
@@ -65,11 +70,14 @@ Vektor Jakobi(const Matrix& A, const Vektor& b, const Vektor& x0, double& eps, i
 	return xnew;
 }
 
-Vektor GaussSeidel(const Matrix& A, const Vektor& b, const Vektor& x0, double& eps, int& maxiter)
+Vektor GaussSeidel(const Matrix& A, const Vektor& b, const Vektor& x0, double& eps, int& maxiter, std::string output)
 {
 	int iter = 0;
 	double err = (A*x0 - b).Norm2(), s;
 	Vektor xold(x0), xnew(x0.Laenge());
+	std::fstream out; 
+	if(!output.empty())
+		out= std::fstream(output, std::ios_base::out);
 	
 	while(iter < maxiter && err > eps) {
 		for(size_t i = 0; i < x0.Laenge(); i++) {
@@ -82,6 +90,8 @@ Vektor GaussSeidel(const Matrix& A, const Vektor& b, const Vektor& x0, double& e
 			xnew(i) = (b(i) - s)/A(i, i);
 		}
 		err = (A*xnew - b).Norm2();
+		if(out.good());
+			out << err/b.Norm2() << std::endl;
 		xold = xnew;
 		iter++;
 	}
@@ -89,13 +99,16 @@ Vektor GaussSeidel(const Matrix& A, const Vektor& b, const Vektor& x0, double& e
 	return xnew;
 }
 
-Vektor ConjugateGradient(const Matrix& A, const Vektor& b, const Vektor& x0, double& eps, int& maxiter)
+Vektor ConjugateGradient(const Matrix& A, const Vektor& b, const Vektor& x0, double& eps, int& maxiter, std::string output)
 {
 	Vektor x(x0), p(b - A*x0);
 	Vektor r(p), q(p);
 	double gammaNew, gammaOld = r*r, alpha;
 	int iter = 0;
 	double err = (A*x0 - b).Norm2();
+	std::fstream out; 
+	if(!output.empty())
+		out= std::fstream(output, std::ios_base::out);
 	
 	while(iter < maxiter && err > eps) {
 		q = A*p;
@@ -105,6 +118,8 @@ Vektor ConjugateGradient(const Matrix& A, const Vektor& b, const Vektor& x0, dou
 		gammaNew = r*r;
 		p = r + (gammaNew/gammaOld)*p;
 		err = r.Norm2();
+		if(out.good());
+			out << err/b.Norm2() << std::endl;
 		gammaOld = gammaNew;
 		iter++;
 	}
