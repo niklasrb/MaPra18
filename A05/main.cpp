@@ -60,9 +60,9 @@ Vektor Jakobi(const Matrix& A, const Vektor& b, const Vektor& x0, double& eps, i
 			}
 			xnew(i) = (b(i) - s)/A(i, i);
 		}
-		err = (A*xnew - b).Norm2();
+		err = (A*xnew - b).Norm2()/b.Norm2();
 		if(out.good());
-			out << err/b.Norm2() << std::endl;
+			out << err << std::endl;
 		xold = xnew;
 		iter++;
 	}
@@ -89,9 +89,9 @@ Vektor GaussSeidel(const Matrix& A, const Vektor& b, const Vektor& x0, double& e
 			
 			xnew(i) = (b(i) - s)/A(i, i);
 		}
-		err = (A*xnew - b).Norm2();
+		err = (A*xnew - b).Norm2()/b.Norm2();
 		if(out.good());
-			out << err/b.Norm2() << std::endl;
+			out << err << std::endl;
 		xold = xnew;
 		iter++;
 	}
@@ -117,9 +117,9 @@ Vektor ConjugateGradient(const Matrix& A, const Vektor& b, const Vektor& x0, dou
 		r -= alpha*q;
 		gammaNew = r*r;
 		p = r + (gammaNew/gammaOld)*p;
-		err = r.Norm2();
+		err = r.Norm2()/b.Norm2();
 		if(out.good());
-			out << err/b.Norm2() << std::endl;
+			out << err << std::endl;
 		gammaOld = gammaNew;
 		iter++;
 	}
