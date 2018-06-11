@@ -13,6 +13,14 @@
 
 #include <iostream>
 
+class EmptyVisualizer : public GraphVisualizer
+{
+    void markVertex(VertexT vertex, VertexStatus status) {}
+    void markEdge(EdgeT e, EdgeStatus status) {}
+    void updateVertex(VertexT vertex, double cost, double estimate, VertexT parent, VertexStatus status) {}
+    void draw(){}
+};
+
 class TextVisualizer : public GraphVisualizer
 {
   public:
@@ -48,6 +56,8 @@ class TextVisualizer : public GraphVisualizer
         
         std::cerr << ", Kosten " << (cost+estimate) << " = " << cost << "+" << estimate << '\n';
     }
+    
+    void draw() override {}
 };
 
 #endif

@@ -78,15 +78,28 @@ enum class CellType {
     Destination
 };
 
-
+//--------------------------
+// Diese Klasse ermoeglicht einfache Interaktion mit vector<CellType>
+//---------------------------
 class Labyrinth : public CoordinateGraph
 {
 protected:
 	std::vector<CellType> cells;
-	void Initialize(const std::vector<CellType>& cells, size_t h, size_t b);
 public:
+	void Initialize(const std::vector<CellType>& cells, size_t h, size_t b);
 	CostT estimatedCost( VertexT from, VertexT to) const override;
 	friend std::istream& operator >>(std::istream& is, Labyrinth& lg);
+};
+
+
+class CircularGraph : public CoordinateGraph
+{
+	CostT estimatedCost( VertexT from, VertexT to) const override;
+};
+
+class SphericalGraph : public CoordinateGraph
+{
+	CostT estimatedCost( VertexT from, VertexT to) const override;
 };
 
 

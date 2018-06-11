@@ -59,7 +59,16 @@ std::istream& operator >>(std::istream& is, CoordinateGraph& cg)
 	return is;
 }
 
+CostT CircularGraph::estimatedCost( VertexT from, VertexT to) const
+{
+	auto a = this->coord.at(from), b = this->coord.at(to);
+	return std::abs(a.first - b.first) + std::abs(a.second - b.second);
+}
 
+CostT SphericalGraph::estimatedCost( VertexT from, VertexT to) const
+{
+	
+}
  
 CostT Labyrinth::estimatedCost( VertexT from, VertexT to) const	// use manhattan metric for estimation
 {
