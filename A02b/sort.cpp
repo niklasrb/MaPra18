@@ -28,12 +28,12 @@ int main(int argc, char** argv)
 	std::vector<std::string> strings;
 	char input;
 	// Einlesen
-	std::fstream f("doubles.txt", std::ios_base::in);
-	f >> zahlen; f.close();
-	f = std::fstream("studenten.txt", std::ios_base::in);
-	f >> studenten; f.close();
-	f = std::fstream("strings.txt", std::ios_base::in);
-	f >> strings; f.close();
+	std::fstream fd("doubles.txt", std::ios_base::in);
+	fd >> zahlen; fd.close();
+	std::fstream fstu("studenten.txt", std::ios_base::in);
+	fstu >> studenten; fstu.close();
+	std::fstream fstr("strings.txt", std::ios_base::in);
+	fstr >> strings; fstr.close();
 	
 	std::cout << "-- Eingelesen --" << std::endl << "doubles: " << std::endl << zahlen << std::endl;
 	std::cout << "studenten: " << std::endl << studenten << std::endl;
@@ -67,9 +67,9 @@ int main(int argc, char** argv)
 	std::cout << "-- Sortiert -- " << std::endl << "doubles: " << std::endl << zahlen << std::endl;
 	ergebnis(zahlen);
 	std::cout << "studenten: " << std::endl << studenten << std::endl;
-	//ergebnis(studenten);    // crashes with segfault
+	ergebnis(studenten);    // crashes with segfault
 	std::cout << "strings: " << std::endl <<  strings << std::endl;
-	//ergebnis(strings);	// linking error
+	ergebnis(strings);	// linking error
 	return 0;
 }
 

@@ -1,25 +1,22 @@
-/********************************************************************
-*  Name       : unit2b.h                                            *
-*  Verwendung : Umgebung zu Praktikumsaufgabe (MaPra),              *
-*               Sortieralgorithmen mit Templates                    *
-*  Autor      : S. Gross, IGPM RWTH Aachen                          *
-*  Datum      : Apr '13                                             *
-*  Sprache    : C++                                                 *
-********************************************************************/
+/*****************************************************************
+*  Name       : unit.h                                           *
+*  Verwendung : Schnittstelle zu Praktikumsumgebung (MAPRA),     *
+*               Iterative Loesungsverfahren                      *
+*  Autor      : Y. Zhang, IGPM RWTH Aachen                       *
+*  Datum      : Feb 2014                                         *
+*****************************************************************/
 
-#ifndef unit2b
-#define unit2b
+class Matrix;
+class Vektor;
 
-#include "student.h"
-#include <iostream>
-#include <vector>
-#include <string>
+extern const int AnzahlBeispiele;
+/**
+   Eingabe: int Bsp, Matrix A, Vektro x0, Vektor b, double tol, int maxiter.
+   Ausgabe: Matrix A, Vektor x0, Vektor b, double tol, int maxiter.
+ */
+void Start ( int Bsp, Matrix &A, Vektor &x0, Vektor &b, double &tol, int &maxiter);
 
-
-// Funktionen zur Ueberpruefung der Ergebnisse
-// geben zurueck, ob ein Fehler entdeckt wurde
-bool ergebnis( const std::vector<double>& feld);
-bool ergebnis( const std::vector<std::string>& feld);
-bool ergebnis( const std::vector<Student>& feld);
-
-#endif
+/**
+ Methode: 0 -> Jacobi, 1-> GS, 2->CG
+ */
+void Ergebnis ( Vektor &x, int Iterationen, int Methode );

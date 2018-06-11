@@ -50,7 +50,7 @@ Vektor Jakobi(const Matrix& A, const Vektor& b, const Vektor& x0, double& eps, i
 	Vektor xold(x0), xnew(x0.Laenge());
 	std::fstream out; 
 	if(!output.empty())
-		out= std::fstream(output, std::ios_base::out);
+		out.open(output, std::ios_base::out);
 
 	while(iter < maxiter && err > eps) {
 		for(size_t i = 0; i < x0.Laenge(); i++) {
@@ -77,7 +77,7 @@ Vektor GaussSeidel(const Matrix& A, const Vektor& b, const Vektor& x0, double& e
 	Vektor xold(x0), xnew(x0.Laenge());
 	std::fstream out; 
 	if(!output.empty())
-		out= std::fstream(output, std::ios_base::out);
+		out.open(output, std::ios_base::out);
 	
 	while(iter < maxiter && err > eps) {
 		for(size_t i = 0; i < x0.Laenge(); i++) {
@@ -107,8 +107,8 @@ Vektor ConjugateGradient(const Matrix& A, const Vektor& b, const Vektor& x0, dou
 	int iter = 0;
 	double err = (A*x0 - b).Norm2();
 	std::fstream out; 
-	if(!output.empty())
-		out= std::fstream(output, std::ios_base::out);
+	if(!output.empty()) 
+		out.open(output, std::ios_base::out);
 	
 	while(iter < maxiter && err > eps) {
 		q = A*p;

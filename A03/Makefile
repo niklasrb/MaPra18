@@ -1,16 +1,17 @@
-CXX = g++
-CXXFLAGS = -O2 -g  -Wall --std=c++11
+CXXFLAGS = -O2 -Wall --std=c++11
 
-sort: sort.o unit.o student.o
+main: vektor.o matrix.o main.o unit.o
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
-sort.o: sort.cpp student.h
+test: vektor.o matrix.o test.o
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
+vektor.o: vektor.cpp vektor.h
 	$(CXX) $(CXXFLAGS) -c $<
 
-student.o: student.cpp student.h
+matrix.o: matrix.cpp matrix.h vektor.h
 	$(CXX) $(CXXFLAGS) -c $<
-
-clean:
-	rm -f student.o sort.o sort
 
 .PHONY: clean
+clean:
+	rm -f test vektor.o matrix.o
