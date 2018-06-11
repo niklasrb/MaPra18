@@ -75,16 +75,10 @@ void BestimmeNullstellen(const double& a, const double& b, const double& c)
 	
 	if(p >= 0) {							// Versuche Ausloeschung zu vermeiden
 		x2 = -p/2 - wurzel;	// < 0
-		if(q == 0) 
-			x1 = 0;
-		else 
-			x1 = q/x2;
+		x1 = q/x2;
 	} else {
 		x1 = -p/2 + wurzel;	// > 0
-		if(q == 0) 
-			x2 = 0;
-		else 
-			x2 = q/x1;
+		x2 = q/x1;
 	}
 	Ergebnis(2, false, x1, x2);
 	return;	
