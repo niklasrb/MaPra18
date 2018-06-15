@@ -59,7 +59,7 @@ protected:
 public:
     const DistanceGraph::NeighborT& getNeighbors( VertexT v) const override;
     
-    CostT estimatedCost( VertexT from, VertexT to) const override;
+    virtual CostT estimatedCost( VertexT from, VertexT to) const = 0;
     
     CostT cost( VertexT from, VertexT to) const override;
     
@@ -68,6 +68,14 @@ public:
     void Print() const;
 };
 
+
+class EuclideanDistanceGraph : public CoordinateGraph { 
+protected:
+	double normModifier = 1.;
+public:	
+	EuclideanDistanceGraph(double normModifier);
+	 CostT estimatedCost( VertexT from, VertexT to) const override;
+};
 //-------------------------------------------------------------------------------------------------
 // Diese Enumeration beschreibt die moeglichen Zellentypen im Labyrinth.
 //-------------------------------------------------------------------------------------------------
@@ -89,17 +97,6 @@ public:
 	void Initialize(const std::vector<CellType>& cells, size_t h, size_t b);
 	CostT estimatedCost( VertexT from, VertexT to) const override;
 	friend std::istream& operator >>(std::istream& is, Labyrinth& lg);
-};
-
-
-class CircularGraph : public CoordinateGraph
-{
-	CostT estimatedCost( VertexT from, VertexT to) const override;
-};
-
-class SphericalGraph : public CoordinateGraph
-{
-	CostT estimatedCost( VertexT from, VertexT to) const override;
 };
 
 

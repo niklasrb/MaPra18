@@ -11,12 +11,7 @@ const DistanceGraph::NeighborT& CoordinateGraph::getNeighbors( VertexT v)  const
 	assert(v < this->numVertices());
 	return neighbors.at(v);
 }
-    
-CostT CoordinateGraph::estimatedCost( VertexT from, VertexT to) const // Use Euclidean distance for estimation
-{
-	auto a = this->coord.at(from), b = this->coord.at(to);
-	return std::sqrt(pow(a.first - b.first, 2) + pow(a.second - b.second, 2));
-}
+   
     
 CostT CoordinateGraph::cost( VertexT from, VertexT to) const
 {
@@ -59,15 +54,12 @@ std::istream& operator >>(std::istream& is, CoordinateGraph& cg)
 	return is;
 }
 
-CostT CircularGraph::estimatedCost( VertexT from, VertexT to) const
+EuclideanDistanceGraph::EuclideanDistanceGraph(double normModifier = 1.) : normModifier(normModifier) {}
+ 
+CostT EuclideanDistanceGraph::estimatedCost( VertexT from, VertexT to) const // Use Euclidean distance for estimation
 {
 	auto a = this->coord.at(from), b = this->coord.at(to);
-	return std::abs(a.first - b.first) + std::abs(a.second - b.second);
-}
-
-CostT SphericalGraph::estimatedCost( VertexT from, VertexT to) const
-{
-	
+	return this->normModifier*std::sqrt(pow(a.first - b.first, 2) + pow(a.second - b.second, 2));
 }
  
 CostT Labyrinth::estimatedCost( VertexT from, VertexT to) const	// use manhattan metric for estimation

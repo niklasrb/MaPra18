@@ -65,6 +65,7 @@ bool A_star(const DistanceGraph& g, GraphVisualizer& v, VertexT start, VertexT z
 		v.markVertex(cur, VertexStatus::Active);
 		//std::cout << "cur = " << cur << std::endl;
 		if(cur == ziel) { // Ziel gefunden
+			v.markVertex(cur, VertexStatus::Destination);
 			reconstruct(start, ziel, origin, weg);
 			return true;
 		}
