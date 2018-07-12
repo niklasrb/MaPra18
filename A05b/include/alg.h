@@ -1,5 +1,4 @@
 
-#include "text_visualizer.h"
 #include "unit.h"
 #include <algorithm>
 

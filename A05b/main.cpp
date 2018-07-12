@@ -143,8 +143,8 @@ int main()
 			}
         }
 
-        //window.clear();
-        //window.display();
+        window->clear(sf::Color::White);
+        window->display();
     }
 
     return 0;
